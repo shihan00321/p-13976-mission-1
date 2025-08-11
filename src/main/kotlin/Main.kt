@@ -19,6 +19,11 @@ fun main() {
                 wiseSayings.add(wiseSaying)
                 println("${id++}번 명언이 등록되었습니다.")
             }
+            "목록" -> {
+                println("번호 / 작가 / 명언")
+                println("-------------------")
+                wiseSayings.reversed().forEach { println("${it.id} / ${it.author} / ${it.quote}") }
+            }
             "종료" -> {
                 break
             }
