@@ -12,7 +12,7 @@ class WiseSayingService{
     }
 
     fun findWiseSayingList(): List<WiseSaying> {
-        return wiseSayingRepository.findAll().reversed()
+        return wiseSayingRepository.findAll()
     }
 
     fun deleteWiseSaying(id: Long): Boolean {
@@ -25,14 +25,7 @@ class WiseSayingService{
     }
 
     fun updateWiseSaying(id: Long, newQuote: String, newAuthor: String): Boolean {
-        val wiseSaying = wiseSayingRepository.findById(id)
-        return if (wiseSaying != null) {
-            wiseSaying.quote = newQuote
-            wiseSaying.author = newAuthor
-            true
-        } else {
-            false
-        }
+        return wiseSayingRepository.update(id, newQuote, newAuthor)
     }
 
     fun findById(id: Long): WiseSaying? {
