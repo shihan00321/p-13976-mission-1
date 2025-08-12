@@ -1,4 +1,4 @@
-package com
+package com.ll
 
 data class WiseSaying(
     val id : Long,
