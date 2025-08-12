@@ -27,13 +27,26 @@ class WiseSayingRepository {
         return wiseSaying
     }
 
-    fun findAll(): List<WiseSaying> {
+    fun findAll(keywordType: String? = null, keyword: String? = null): List<WiseSaying> {
         val wiseSayings = mutableListOf<WiseSaying>()
 
-        fileDirectory.listFiles()?.filter { it.name.endsWith(".json") && !it.name.equals("data.json")  }?.forEach { file ->
-            JsonUtil.fromJson(file.readText()).let { wiseSayings.add(it) }
+        fileDirectory.listFiles()?.filter {
+            it.name.endsWith(".json") && !it.name.equals("data.json")
+        }?.forEach { file ->
+            JsonUtil.fromJson(file.readText()).also { wiseSayings.add(it) }
         }
-        return wiseSayings.sortedBy { it.id }.reversed()
+
+        val allWiseSayings = wiseSayings.sortedBy { it.id }.reversed()
+
+        return if (keywordType != null && keyword != null) {
+            allWiseSayings.filter {
+                when (keywordType) {
+                    "author" -> it.author.contains(keyword)
+                    "content" -> it.quote.contains(keyword)
+                    else -> false
+                }
+            }
+        } else allWiseSayings
     }
 
     fun findById(id: Long): WiseSaying? {

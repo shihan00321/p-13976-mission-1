@@ -14,12 +14,18 @@ class WiseSayingController{
         println("${wiseSaying.id}번 명언이 등록되었습니다.")
     }
 
-    fun showWiseSayings() {
-        val wiseSayings = wiseSayingService.findWiseSayingList()
+    fun showWiseSayings(keywordType : String? = null, keyword: String? = null) {
+        if (keywordType != null && keyword != null) {
+            println("----------------------")
+            println("검색타입 : $keywordType")
+            println("검색어 : $keyword")
+            println("----------------------")
+        }
+        val wiseSayings = wiseSayingService.findWiseSayingList(keywordType, keyword)
         println("번호 / 작가 / 명언")
-        println("-------------------")
-        wiseSayings.forEach {
-            println("${it.id} / ${it.author} / ${it.quote}")
+        println("----------------------")
+        wiseSayings.forEach { wiseSaying ->
+            println("${wiseSaying.id} / ${wiseSaying.author} / ${wiseSaying.quote}")
         }
     }
 

@@ -11,8 +11,8 @@ class WiseSayingService{
         return wiseSayingRepository.save(wiseSaying)
     }
 
-    fun findWiseSayingList(): List<WiseSaying> {
-        return wiseSayingRepository.findAll()
+    fun findWiseSayingList(keywordType: String? = null, keyword: String? = null): List<WiseSaying> {
+        return wiseSayingRepository.findAll(keywordType, keyword)
     }
 
     fun deleteWiseSaying(id: Long): Boolean {

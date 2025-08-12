@@ -8,8 +8,14 @@ class Rq(input : String) {
         val split = input.split("?")
         command = split[0].trim()
         if (split.size > 1) {
-            val params = split[1].split("=")
-            paramMap[params[0].trim()] = params[1].trim()
+            val params =  split[1].split("&")
+
+            params.forEach { param ->
+                val keyValue = param.split("=")
+                if (keyValue.size == 2) {
+                    paramMap[keyValue[0].trim()] = keyValue[1].trim()
+                }
+            }
         }
     }
 

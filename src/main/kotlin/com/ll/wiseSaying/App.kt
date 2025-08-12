@@ -12,7 +12,11 @@ class App {
             val rq = Rq(input)
             when (rq.getCommand()) {
                 "등록" -> wiseSayingController.addWiseSaying()
-                "목록" -> wiseSayingController.showWiseSayings()
+                "목록" -> {
+                    val keywordType = rq.getParam("keywordType")
+                    val keyword = rq.getParam("keyword")
+                    wiseSayingController.showWiseSayings(keywordType, keyword)
+                }
                 "삭제" -> {
                     val id = rq.getParam("id")!!.toLong()
                     wiseSayingController.deleteWiseSaying(id)
