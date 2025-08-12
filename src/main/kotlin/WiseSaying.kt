@@ -2,8 +2,8 @@ package com
 
 data class WiseSaying(
     val id : Long,
-    val quote: String,
-    val author: String
+    var quote: String,
+    var author: String
 ) {
 
 }

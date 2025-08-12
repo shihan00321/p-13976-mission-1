@@ -24,7 +24,7 @@ fun main() {
                 println("-------------------")
                 wiseSayings.reversed().forEach { println("${it.id} / ${it.author} / ${it.quote}") }
             }
-            input.startsWith("삭제") -> {
+            input.startsWith("삭제?id=") -> {
                 val id = input.split("?")[1].split("=")[1].toLong()
                 val deleteWiseSaying = wiseSayings.find { it.id == id}
                 if (deleteWiseSaying == null) {
@@ -33,6 +33,25 @@ fun main() {
                 }
                 wiseSayings.remove(deleteWiseSaying)
                 println("${id}번 명언이 삭제되었습니다.")
+            }
+            input.startsWith("수정?id=") -> {
+                val id = input.split("?")[1].split("=")[1].toLong()
+                val updateWiseSaying = wiseSayings.find { it.id == id }
+                if (updateWiseSaying == null) {
+                    println("${id}번 명언은 존재하지 않습니다.")
+                    continue
+                }
+
+                println("명언(기존): ${updateWiseSaying.quote}")
+                print("명언: ")
+                val newQuote = readln()
+                updateWiseSaying.quote = newQuote
+
+                println("작가(기존): ${updateWiseSaying.author}")
+                print("작가: ")
+                val newAuthor = readln()
+                updateWiseSaying.author = newAuthor
+
             }
             input == "종료" -> {
                 break
