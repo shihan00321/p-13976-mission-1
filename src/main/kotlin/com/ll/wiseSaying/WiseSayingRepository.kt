@@ -30,7 +30,7 @@ class WiseSayingRepository {
     fun findAll(): List<WiseSaying> {
         val wiseSayings = mutableListOf<WiseSaying>()
 
-        fileDirectory.listFiles()?.filter { it.name.endsWith(".json") }?.forEach { file ->
+        fileDirectory.listFiles()?.filter { it.name.endsWith(".json") && !it.name.equals("data.json")  }?.forEach { file ->
             JsonUtil.fromJson(file.readText()).let { wiseSayings.add(it) }
         }
         return wiseSayings.sortedBy { it.id }.reversed()
@@ -63,6 +63,19 @@ class WiseSayingRepository {
         lastId++
         saveLastId()
         return lastId
+    }
+
+    fun build() {
+        val file = File(fileDirectory, "data.json")
+        val wiseSayings = findAll()
+
+        val jsonList = wiseSayings.joinToString(
+            separator = ",\n",
+            prefix = "[\n",
+            postfix = "\n]"
+        ) { JsonUtil.toJson(it).prependIndent("\t") }
+
+        file.writeText(jsonList)
     }
 
     private fun saveLastId() {

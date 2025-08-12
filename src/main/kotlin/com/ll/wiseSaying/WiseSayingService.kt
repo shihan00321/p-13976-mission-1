@@ -31,4 +31,8 @@ class WiseSayingService{
     fun findById(id: Long): WiseSaying? {
         return wiseSayingRepository.findById(id)
     }
+
+    fun build() {
+        wiseSayingRepository.build()
+    }
 }

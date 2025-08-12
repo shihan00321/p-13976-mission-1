@@ -21,6 +21,7 @@ class App {
                     val id = rq.getParam("id")!!.toLong()
                     wiseSayingController.updateWiseSaying(id)
                 }
+                "빌드" -> wiseSayingController.build()
                 "종료" -> break
                 else -> println("알 수 없는 명령입니다.")
             }
