@@ -78,6 +78,11 @@ class WiseSayingRepository {
         file.writeText(jsonList)
     }
 
+    fun clear() {
+        fileDirectory.listFiles()?.forEach { it.delete() }
+        lastId = 0L
+    }
+
     private fun saveLastId() {
         lastIdFile.writeText(lastId.toString())
     }
