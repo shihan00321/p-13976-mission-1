@@ -14,19 +14,28 @@ class WiseSayingController{
         println("${wiseSaying.id}번 명언이 등록되었습니다.")
     }
 
-    fun showWiseSayings(keywordType : String? = null, keyword: String? = null) {
+    fun showWiseSayings(keywordType : String? = null, keyword: String? = null, page: Int = 1) {
         if (keywordType != null && keyword != null) {
             println("----------------------")
             println("검색타입 : $keywordType")
             println("검색어 : $keyword")
             println("----------------------")
         }
-        val wiseSayings = wiseSayingService.findWiseSayingList(keywordType, keyword)
+        val wiseSayings = wiseSayingService.findWiseSayingList(keywordType, keyword, page)
         println("번호 / 작가 / 명언")
         println("----------------------")
-        wiseSayings.forEach { wiseSaying ->
+        wiseSayings.items.forEach { wiseSaying ->
             println("${wiseSaying.id} / ${wiseSaying.author} / ${wiseSaying.quote}")
         }
+
+        println("----------------------")
+        val totalPages = (wiseSayings.totalCount + 4) / 5
+        print("페이지 : ")
+        for (i in 1..totalPages) {
+            if (i == page) print("[$i]") else print("$i")
+            if (i < totalPages) print(" / ")
+        }
+        println()
     }
 
     fun deleteWiseSaying(id: Long) {

@@ -15,7 +15,8 @@ class App {
                 "목록" -> {
                     val keywordType = rq.getParam("keywordType")
                     val keyword = rq.getParam("keyword")
-                    wiseSayingController.showWiseSayings(keywordType, keyword)
+                    val page = rq.getParam("page")?.toIntOrNull() ?: 1
+                    wiseSayingController.showWiseSayings(keywordType, keyword, page)
                 }
                 "삭제" -> {
                     val id = rq.getParam("id")!!.toLong()

@@ -18,6 +18,14 @@ class WiseSayingRepository {
         } else {
             lastIdFile.writeText(lastId.toString())
         }
+
+        if (fileDirectory.listFiles()?.none { it.name.endsWith(".json") && !it.name.equals("data.json") } == true) {
+            for (i in 1..10) {
+                val id = getNextId()
+                val wiseSaying = WiseSaying(id, "명언 $i", "작자미상 $i")
+                save(wiseSaying)
+            }
+        }
     }
 
     fun save(wiseSaying: WiseSaying): WiseSaying {
@@ -27,7 +35,7 @@ class WiseSayingRepository {
         return wiseSaying
     }
 
-    fun findAll(keywordType: String? = null, keyword: String? = null): List<WiseSaying> {
+    fun findAll(keywordType: String? = null, keyword: String? = null, page: Int = 1, pageSize: Int = 5): PageResult {
         val wiseSayings = mutableListOf<WiseSaying>()
 
         fileDirectory.listFiles()?.filter {
@@ -38,15 +46,24 @@ class WiseSayingRepository {
 
         val allWiseSayings = wiseSayings.sortedBy { it.id }.reversed()
 
-        return if (keywordType != null && keyword != null) {
-            allWiseSayings.filter {
+        val filteredWiseSayings = if (keywordType != null && keyword != null) {
+            allWiseSayings.filter { wiseSaying ->
                 when (keywordType) {
-                    "author" -> it.author.contains(keyword)
-                    "content" -> it.quote.contains(keyword)
+                    "author" -> wiseSaying.author.contains(keyword)
+                    "content" -> wiseSaying.quote.contains(keyword)
                     else -> false
                 }
             }
         } else allWiseSayings
+
+        val startIndex = (page - 1) * pageSize
+        val endIndex = minOf(startIndex + pageSize, filteredWiseSayings.size)
+
+        val paged = if (startIndex < filteredWiseSayings.size) {
+            filteredWiseSayings.subList(startIndex, endIndex)
+        } else emptyList()
+
+        return PageResult(paged, filteredWiseSayings.size)
     }
 
     fun findById(id: Long): WiseSaying? {
@@ -82,7 +99,7 @@ class WiseSayingRepository {
         val file = File(fileDirectory, "data.json")
         val wiseSayings = findAll()
 
-        val jsonList = wiseSayings.joinToString(
+        val jsonList = wiseSayings.items.joinToString(
             separator = ",\n",
             prefix = "[\n",
             postfix = "\n]"
